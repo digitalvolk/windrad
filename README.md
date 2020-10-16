@@ -4,6 +4,8 @@ Dieses programmgesteuerte LEGO® Windrad wurde als Demonstration entwickelt, wie
 
 Basierend auf dem LEGO®-Modell 10268 wurde die **Mechanik** des Modells verändert, eine **Platine** designt, ein **Mikrocontroller** zur Steuerung programmiert sowie ein **Windows-Programm** zur Kommunikation mit dem Mikrocontroller entwickelt. Dazu gehört ebenfalls eine Benutzerschnittstelle in Form einer **Webseite** auf Basis von HTML 5, Javascript und CSS, welche wiederum mit dem Windows-Programm kommuniziert.
 
+![Architektur des physikalischen Zwillings](architecture.jpg "Architektur des physikalischen Zwillings")
+
 ## Aufkleber
 
 Das Originalmodell trägt Markierungen eines Windrad-Herstellers. Zur Anpassung an die Provadis-Hochschule kann man entweder Bausteine bedrucken lassen oder - der einfachere Weg - individuelle Aufkleber anbringen. Diese wurde also großflächiger transparenter Aufkleber produziert, von einem der gängigen Druckdienstleister erstellt und dann mit einem Skalpell ausgeschnitten.
