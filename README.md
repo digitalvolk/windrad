@@ -1,4 +1,4 @@
-# Physikalischer Zwilling oder "das LEGO© Windrad"
+# Physikalischer Zwilling oder "das LEGO® Windrad"
 
 Dieses programmgesteuerte LEGO®-Windrad wurde als Demonstration für die Vielfältigkeit allein der technischen Aufgaben in der Informatik entwickelt.
 
@@ -26,7 +26,7 @@ Im Ordner `pcb` sind die Quelldateien zur Nutzung mit der kostenlosen Software [
 
 ## Microcontroller
 
-Herzstück der Platine ist ein *Arduino Micro* Mikrocontroller (oder ein beliebiger kompatibler Klon desselben). Die Firmware wurde als Arduino-Programm in der Sprache C umgesetzt.
+Herzstück der Platine ist ein *Arduino Micro* Mikrocontroller (oder ein beliebiger kompatibler Klon desselben). Die Firmware wurde als Arduino-Programm in der Sprache C++ umgesetzt.
 
 Im Ordner `firmware` befindet sich der Quellcode für den Mikrocontroller. Er kann mit der kostenlosen Software [Arduino](https://www.arduino.cc/) kompiliert und auf den Mikrocontroller übertragen werden. Die Kalibrierungsdaten wurden experimentell erzeugt, sollten jedoch zu allen im Originalmodell verwendeten LEGO®-Motoren passen.
 
