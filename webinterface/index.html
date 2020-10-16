@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Windgeschwindigkeit</title>
+        <style>
+            body {
+                background: url("assets/wind-turbine-wallpapers.jpg") no-repeat center center fixed;
+                background-size: cover;
+                margin: 0;
+                padding: 0;
+                font-size: 100%;
+            }
+            body, input, button {
+                font-family: Arial, Helvetica, sans-serif;
+                text-shadow: 0 0 3px white;
+                font-size: 1.75em;
+            }
+            input, button {
+                font-size: 1em;
+            }
+            button {
+                font-size: .9em;
+                background: white;
+                border: 0;
+            }
+            button:hover {
+                background: lightsteelblue;
+                cursor: pointer;
+            }
+            .grid-wrapper {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+            #logo-area {
+                text-align: center;
+                margin-top: 5em;
+            }
+            #logo-area > img {
+                width: 15em;
+                margin-bottom: 1em;
+            }
+            #form-area {
+                margin-top: auto;
+                margin-left: 3em;
+            }
+            .error {
+                color: red;
+            }
+        </style>
+        <script>
+            function init() {
+                document.getElementById("button-search").onclick = search;
+                document.getElementById("input-location").onkeyup = (event => { if (event.keyCode === 13) { document.getElementById("button-search").click(); }});
+                console.log("loaded.");
+            }
+
+            function search() {
+                var location = document.getElementById("input-location").value;
+
+                // alternate: detect if wind speed was entered manually
+                var speed = parseInt(location);
+                if (!isNaN(speed)) {
+                    updateWindSpeed(speed);
+                    updatePhysicalTwin(speed);
+                    return;
+                }
+                
+                // call weather api for wind speed at specified location
+                var apiKey = "API-KEY HIER EINTRAGEN";
+                var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + encodeURI(location) + "&appId=" + apiKey;
+                fetch(apiUrl)
+                    .then(function(response) {
+                        // catch HTTP errors
+                        if (!response.ok) {
+                            console.log(response);
+                            var msg = "\"" + location + "\" nicht gefunden."
+                            showError(msg);
+                            throw Error(msg);
+                        }
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        console.log(data);
+
+                        var speed = 3.6 * data.wind.speed; // convert m/s into km/h
+
+                        // update user interface
+                        updateWindSpeed(speed);
+                        // update LEGO© wind turbine
+                        updatePhysicalTwin(speed);
+                    })
+                    .catch(function (error) {
+                        console.error("Error querying weather API: " + error);
+                    });
+            }
+
+            function showError(message) {
+                var textSpeed = document.getElementById("text-speed");
+                textSpeed.classList.add("error");
+
+                textSpeed.innerText = message;
+            }
+
+            function scale(value, minIn, maxIn, minOut, maxOut) {
+                return (value - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+            }
+
+            function updateWindSpeed(speed) {
+                var textSpeed = document.getElementById("text-speed");
+
+                // common name lookup table
+                var commonNames = [
+                    [0, "Windstille"],
+                    [2, "leiser Zug"],
+                    [10, "leichte Brise"],
+                    [20, "schwache Brise"],
+                    [29, "mäßige Brise"],
+                    [38, "frische Brise"],
+                    [47, "starker Wind"],
+                    [57, "starker bis stürmischer Wind"],
+                    [66, "stürmischer Wind"],
+                    [75, "Sturm"],
+                    [84, "Sturm bis schwerer Sturm"],
+                    [94, "schwerer Sturm"],
+                    [103, "orkanartiger Sturm"],
+                    [112, "Orkan"]
+                ];
+                // Quelle: https://de.wikipedia.org/wiki/Windgeschwindigkeit
+                
+                // show numerical speed and common name for the wind speed
+                var commonName = commonNames[0][1];
+                for (i = 0; i < commonNames.length; i++) {
+                    if (speed >= commonNames[i][0]) {
+                        commonName = commonNames[i][1];
+                    }
+                }
+
+                textSpeed.classList.remove("error");
+                textSpeed.innerText = "Wind: " + speed.toLocaleString() + " km/h (" + commonName + ")";
+            }
+
+            function updatePhysicalTwin(speed) {
+                // arbitrarily limit wind speed to [0, 75] km/h, mapping 80 km/h to 100%
+                var driverSpeed = Math.min(75, Math.max(0, Math.round(speed)));
+                driverSpeed = Math.round(scale(driverSpeed, 0, 75, 0, 100));
+                var driverUrl = "http://localhost:2019/rotor/" + driverSpeed.toString();
+
+                fetch(driverUrl)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw Error("Driver returned error.");
+                        } else {
+                            console.log("Driver was called: " + driverUrl);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Error communicating with driver: " + error.toString());
+                    });
+            }
+
+            window.onload = init;
+        </script>
+    </head>
+    <body>
+        <div class="grid-wrapper">
+            <div id="logo-area">
+                <img src="assets/Logo_Provadis_Hochschule.svg"><br>Fachbereich Informatik und Wirtschaftsinformatik
+            </div>
+            <div id="form-area">
+                <label for="input-location">Ort:</label>
+                <input id="input-location" accesskey="o" type="text" value="Frankfurt">
+                <button id="button-search">&#x1F50D;</button>
+                <br>
+                <br>
+                <span id="text-speed">&nbsp;</span>
+            </div>
+        </div>
+    </body>
+</html>
