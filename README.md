@@ -34,7 +34,7 @@ Im Ordner `firmware` befindet sich der Quellcode für den Mikrocontroller. Er ka
 
 ## Webinterface
 
-Die Benutzerschnittstelle ist als Webseite auf Basis von HTML 5, Javascript und CSS realisiert. Zum Abruf der Wetterdaten wird die API von (OpenWeather)[https://openweathermap.org/] verwendet. Die Kommunikation mit der Treibersoftware unter Windows erfolgt via HTTP.
+Die Benutzerschnittstelle ist als Webseite auf Basis von HTML 5, Javascript und CSS realisiert. Zum Abruf der Wetterdaten wird die API von [OpenWeather](https://openweathermap.org/) verwendet. Die Kommunikation mit der Treibersoftware unter Windows erfolgt via HTTP.
 
 Im Ordner `webinterface` befinden sich die Quelldateien für das Webinterface.
 
